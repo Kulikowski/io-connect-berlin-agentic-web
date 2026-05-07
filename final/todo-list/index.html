@@ -1,0 +1,149 @@
+<!doctype html>
+<!--
+ Copyright 2026 Google LLC
+ SPDX-License-Identifier: Apache-2.0
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Practical steps to make your website agent-ready" />
+    <title>Workshop</title>
+    <link href="style.css" rel="stylesheet" />
+
+    <!-- Preload Google Fonts (Outfit) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+      as="style"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <main class="app-container">
+      <!-- Decorative Glow Effects -->
+      <div class="glow-orb glow-primary"></div>
+      <div class="glow-orb glow-secondary"></div>
+
+      <!-- App Header -->
+      <header class="app-header">
+        <h1>Practical steps to make your website agent-ready</h1>
+        <p class="subtitle">IO Connect Berlin 2026</p>
+      </header>
+
+      <!-- Stats Dashboard Section -->
+      <section class="stats-dashboard" aria-label="Task Statistics">
+        <div class="stat-card" id="statPendingCard">
+          <span class="stat-val" id="pendingCount">0</span>
+          <span class="stat-lbl">Remaining</span>
+        </div>
+        <div class="stat-card" id="statCompletedCard">
+          <span class="stat-val" id="completedCount">0</span>
+          <span class="stat-lbl">Completed</span>
+        </div>
+        <div class="stat-card" id="statTotalCard">
+          <span class="stat-val" id="totalCount">0</span>
+          <span class="stat-lbl">Total Tasks</span>
+        </div>
+      </section>
+
+      <!-- Input Form Section -->
+      <section class="input-section">
+        <form
+          id="addTodoForm"
+          novalidate
+        >
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="todoInput"
+                name="text"
+                placeholder="Create a new task..."
+                toolparamdescription="The text content of the new task"
+                required
+                minlength="1"
+                autocomplete="off"
+              />
+              <span class="error-msg" id="inputError">Task text cannot be empty.</span>
+            </div>
+            <button type="submit" class="btn btn-add" id="addTodoBtn">
+              <span class="plus-icon">+</span> Add
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Task List Area -->
+      <section class="list-section">
+        <!-- Filter Navigation Tabs -->
+        <nav class="filter-nav" aria-label="Task Filters">
+          <button class="filter-btn active" data-filter="all" id="filterAllBtn">All</button>
+          <button class="filter-btn" data-filter="active" id="filterActiveBtn">Active</button>
+          <button class="filter-btn" data-filter="completed" id="filterCompletedBtn">Completed</button>
+        </nav>
+
+        <!-- Empty List View -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">✨</div>
+          <p>No tasks found. Feel free to add a new one!</p>
+        </div>
+
+        <!-- List items container -->
+        <ul class="todo-list" id="todoList" aria-live="polite">
+          <!-- Task list items will be dynamically inserted here by app.js -->
+        </ul>
+      </section>
+    </main>
+
+    <!-- Edit Modal Dialog (Dialog element) -->
+    <dialog id="editDialog" class="edit-dialog">
+      <div class="dialog-content">
+        <h3>Edit Task</h3>
+        <form id="editTodoForm" novalidate>
+          <input type="hidden" id="editTodoId" />
+          <div class="form-group">
+            <label for="editTodoInput">Task Description</label>
+            <input
+              type="text"
+              id="editTodoInput"
+              name="editText"
+              required
+              minlength="1"
+              autocomplete="off"
+            />
+            <span class="error-msg" id="editInputError">Task text cannot be empty.</span>
+          </div>
+          <div class="dialog-actions">
+            <button type="button" class="btn btn-cancel" id="cancelEditBtn">Cancel</button>
+            <button type="submit" class="btn btn-save" id="saveEditBtn">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <!-- Delete Confirmation Modal Dialog -->
+    <dialog id="deleteConfirmDialog" class="edit-dialog">
+      <div class="dialog-content">
+        <h3>Confirm Delete</h3>
+        <p id="deleteConfirmMessage" style="margin-bottom: 24px; color: var(--text-muted); font-size: 0.95rem;">
+          Are you sure you want to delete this task?
+        </p>
+        <div class="dialog-actions">
+          <button type="button" class="btn btn-cancel" id="cancelDeleteBtn">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Main JS -->
+    <script src="app.js" defer></script>
+  </body>
+</html>
