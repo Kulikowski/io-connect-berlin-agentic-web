@@ -1,0 +1,694 @@
+/**
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/* --- DESIGN SYSTEM & VARIABLES --- */
+:root {
+  --bg-base: #0a0b10;
+  --bg-app: rgba(17, 18, 27, 0.75);
+  --border-glass: rgba(255, 255, 255, 0.06);
+  --glow-primary: rgba(99, 102, 241, 0.15);
+  --glow-secondary: rgba(34, 211, 238, 0.15);
+  
+  /* Accents */
+  --color-primary: #6366f1;       /* Indigo */
+  --color-primary-light: #818cf8;
+  --color-secondary: #22d3ee;     /* Cyan */
+  --color-secondary-light: #67e8f9;
+  --color-success: #10b981;       /* Emerald */
+  --color-danger: #f43f5e;        /* Rose */
+  
+  /* Neutral text colors */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dark: #1e293b;
+  
+  /* Card elements */
+  --card-bg: rgba(30, 41, 59, 0.45);
+  --card-border: rgba(255, 255, 255, 0.05);
+  
+  /* Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Reset & General Page Layout --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* --- Ambient Background Glow Orbs --- */
+.glow-orb {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(120px);
+  z-index: -1;
+  opacity: 0.6;
+}
+
+.glow-primary {
+  background: radial-gradient(circle, var(--color-primary) 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+}
+
+.glow-secondary {
+  background: radial-gradient(circle, var(--color-secondary) 0%, transparent 70%);
+  bottom: -100px;
+  right: -100px;
+}
+
+/* --- Main App Shell / Container --- */
+.app-container {
+  background-color: var(--bg-app);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 10;
+}
+
+/* --- Header Section --- */
+.app-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.app-header h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--text-main) 30%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* --- Dashboard Statistics Card Container --- */
+.stats-dashboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  transition: var(--transition-smooth);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.stat-val {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+#statPendingCard .stat-val {
+  color: var(--color-secondary);
+}
+
+#statCompletedCard .stat-val {
+  color: var(--color-success);
+}
+
+#statTotalCard .stat-val {
+  color: var(--color-primary-light);
+}
+
+.stat-lbl {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+/* --- Input Form Section --- */
+.input-section {
+  margin-bottom: 32px;
+}
+
+.input-group {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.input-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#todoInput {
+  width: 100%;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 16px 20px;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text-main);
+  transition: var(--transition-smooth);
+  outline: none;
+}
+
+#todoInput::placeholder {
+  color: var(--text-muted);
+}
+
+#todoInput:focus {
+  border-color: var(--color-primary);
+  background-color: rgba(30, 41, 59, 0.6);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+}
+
+/* Input Validation Styling */
+#todoInput.invalid {
+  border-color: var(--color-danger);
+  background-color: rgba(244, 63, 94, 0.05);
+}
+
+.error-msg {
+  color: var(--color-danger);
+  font-size: 0.78rem;
+  margin-top: 6px;
+  padding-left: 4px;
+  display: none;
+  font-weight: 500;
+}
+
+/* --- Button Core Design --- */
+.btn {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  outline: none;
+}
+
+.btn-add {
+  background-color: var(--color-primary);
+  color: #fff;
+  padding: 0 24px;
+}
+
+.btn-add:hover {
+  background-color: var(--color-primary-light);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.45);
+  transform: translateY(-1px);
+}
+
+.plus-icon {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* --- Filters Navigation Tabs --- */
+.filter-nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.02);
+  padding: 5px;
+  border-radius: 12px;
+  border: 1px solid var(--border-glass);
+}
+
+.filter-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  padding: 10px 16px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  text-align: center;
+}
+
+.filter-btn:hover {
+  color: var(--text-main);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.filter-btn.active {
+  color: var(--text-main);
+  background-color: var(--card-bg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* --- List Section Empty State --- */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+/* --- Dynamic Tasks List --- */
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Custom scrollbar for task list */
+.todo-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.todo-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.todo-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.todo-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* List Item Card Style */
+.todo-item {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: var(--transition-smooth);
+  animation: slideIn 0.3s ease-out;
+}
+
+.todo-item:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  background-color: rgba(30, 41, 59, 0.55);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.todo-item-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  cursor: pointer;
+}
+
+/* Custom Round Checkbox */
+.custom-checkbox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--text-muted);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.custom-checkbox::after {
+  content: '✓';
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--bg-base);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: var(--transition-smooth);
+}
+
+.todo-item.completed .custom-checkbox {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.todo-item.completed .custom-checkbox::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Text Label Style */
+.todo-text {
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: var(--text-main);
+  line-height: 1.4;
+  transition: var(--transition-smooth);
+  word-break: break-word;
+}
+
+.todo-item.completed .todo-text {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  font-weight: 400;
+}
+
+/* Task Action Buttons */
+.todo-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+  opacity: 0.7;
+  outline: none;
+}
+
+.icon-btn:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Specific Edit and Delete Styles */
+.btn-edit:hover {
+  color: var(--color-secondary);
+  background-color: rgba(34, 211, 238, 0.1);
+}
+
+.btn-delete:hover {
+  color: var(--color-danger);
+  background-color: rgba(244, 63, 94, 0.1);
+}
+
+/* SVG Icon Graphics */
+.icon-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* --- Edit Dialog Modal Styles --- */
+.edit-dialog {
+  border: 1px solid var(--border-glass);
+  background-color: rgba(15, 17, 26, 0.95);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-radius: 24px;
+  padding: 32px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: var(--text-main);
+}
+
+.edit-dialog[open] {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.edit-dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+}
+
+.dialog-content h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--text-main) 30%, var(--color-primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+#editTodoInput {
+  width: 100%;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text-main);
+  transition: var(--transition-smooth);
+  outline: none;
+}
+
+#editTodoInput:focus {
+  border-color: var(--color-primary);
+}
+
+#editTodoInput.invalid {
+  border-color: var(--color-danger);
+  background-color: rgba(244, 63, 94, 0.05);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-cancel {
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  padding: 12px 20px;
+}
+
+.btn-cancel:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.btn-save {
+  background-color: var(--color-success);
+  color: #fff;
+  padding: 12px 20px;
+}
+
+.btn-save:hover {
+  background-color: #059669;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.btn-danger {
+  background-color: var(--color-danger);
+  color: #fff;
+  padding: 12px 20px;
+}
+
+.btn-danger:hover {
+  background-color: #e11d48;
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.4);
+}
+
+/* --- Keyframe Animations --- */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* --- WEBMCP AGENT ACTIVE STATES & STYLING --- */
+
+/* 1. Active Form: Outline & Neon Cyan Pulse Glow */
+*:tool-form-active {
+  outline: none !important;
+  border-color: var(--color-secondary) !important;
+  box-shadow: 
+    0 0 0 2px rgba(34, 211, 238, 0.1),
+    0 0 20px rgba(34, 211, 238, 0.3) !important;
+}
+
+/* Shimmer Glow Animation for WebMCP Active buttons */
+@keyframes mcp-cyan-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes mcp-float-badge {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-4px);
+  }
+}
+
+/* 2. Submit Active: Special Neon Accent Flashing when waiting for confirmation */
+*:tool-submit-active {
+  color: var(--bg-base) !important;
+  font-weight: 700 !important;
+  position: relative !important;
+  border: none !important;
+  cursor: pointer;
+
+  /* Vibrant Neon Shimmer Gradient */
+  background: linear-gradient(110deg, var(--color-secondary) 30%, #e0f7fa 50%, var(--color-secondary) 70%) !important;
+  background-size: 200% 100% !important;
+  animation: mcp-cyan-shimmer 2s infinite linear !important;
+  
+  /* Glowing shadow ring */
+  box-shadow:
+    0 0 0 3px var(--bg-app),
+    0 0 0 5px var(--color-secondary),
+    0 0 20px rgba(34, 211, 238, 0.6);
+}
+
+/* Floating Review & Confirm Badge above active element */
+*:tool-submit-active::after {
+  content: '⚡ AI Action Pending... Click to Confirm';
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  
+  /* Badge styles */
+  background-color: rgba(15, 17, 26, 0.95);
+  color: var(--color-secondary-light);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  pointer-events: none;
+  
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  
+  animation: mcp-float-badge 2s infinite ease-in-out;
+}
+
+/* Small arrow triangle underneath badge */
+*:tool-submit-active::before {
+  content: '';
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  margin-left: -6px;
+  
+  border-width: 6px;
+  border-style: solid;
+  border-color: rgba(15, 17, 26, 0.95) transparent transparent transparent;
+  
+  animation: mcp-float-badge 2s infinite ease-in-out;
+}
