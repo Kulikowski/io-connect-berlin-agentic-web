@@ -1,7 +1,7 @@
-# 🚀 Practical Steps to Make Your Website Agent-Ready
+# 🚀 Practical steps to make your website agent-ready
 **IO Connect Hands-on Workshop**
 
-In this hands-on workshop, you will make two web applications **agent-ready**. By the end of this session, you will expose tools using both **imperative** and **declarative** WebMCP APIs, enabling autonomous AI agents to interact with your websites programmatically and reliably.
+In this hands-on workshop, you will make two web applications **agent-ready**. By the end of this session, you will expose tools using both **imperative** and **declarative** WebMCP APIs, enabling AI agents to interact with your websites programmatically and reliably.
 
 ## 📑 Table of Contents
 - [🛠️ Prerequisites & Pre-Flight Verification](#️-prerequisites--pre-flight-verification)
@@ -25,13 +25,9 @@ Before starting Task 1, verify that your local environment meets the following r
   ```text
   chrome://flags/#enable-webmcp-testing
   ```
-  *(Note: Relaunching Chrome reopens all tabs. Bookmark this README tab before relaunching!)*
-* **Install Inspector Extension:** Install the [Model Context Tool Inspector](https://chromewebstore.google.com/detail/webmcp-model-context-tool/gbpdfapgefenggkahomfgkhfehlcenpd?pli=1) extension to inspect and trigger tools during exercises.
+* **Install Inspector Extension:** Install the [Model Context Tool Inspector](https://chromewebstore.google.com/detail/webmcp-model-context-tool/gbpdfapgefenggkahomfgkhfehlcenpd?pli=1) extension to inspect and trigger tools during exercises. This will enable you to test your WebMCP implementation locally.
+* **Gemini API Key:** To use the Gemini integration of the extension, you will need a Gemini API key. You can get one from [Google AI Studio](https://aistudio.google.com/api-keys).  
 
-### 2. Environment & CLI Tools
-* **Antigravity IDE or CLI:** Install [Antigravity IDE](https://antigravity.google/product/antigravity-ide) or [Antigravity CLI](https://antigravity.google/product/antigravity-cli).
-* **Modern Web Guidance Skill:** Verify that the [Modern Web Guidance](https://github.com/GoogleChrome/modern-web-guidance#-quickstart) skill is installed and accessible.
-* **Gemini API Key:** Ensure your `GEMINI_API_KEY` from [Google AI Studio](https://aistudio.google.com/api-keys) is exported in your terminal environment (`echo $GEMINI_API_KEY`).
 
 > [!IMPORTANT]
 > * **Workshop Workspace:** All hands-on coding during this workshop must take place inside the **[`base/`](./base)** directory.
@@ -49,12 +45,12 @@ npx http-server base --port=8080 -c-1
 *(The `-c-1` flag disables browser caching, ensuring your code edits reload instantly).*
 
 Once running, keep this terminal window open and open two tabs in Chrome:
-* **Todo List App (Tasks 1 & 3):** [http://localhost:8080/todo-list/](http://localhost:8080/todo-list/)
-* **Le Petit Bistro App (Task 2):** [http://localhost:8080/french-bistro/](http://localhost:8080/french-bistro/)
+* **Todo List App:** [http://localhost:8080/todo-list/](http://localhost:8080/todo-list/)
+* **Le Petit Bistro App:** [http://localhost:8080/french-bistro/](http://localhost:8080/french-bistro/)
 
 > [!TIP]
-> **💡 Instant State Reset (Pro-Tip for Lab Work):**  
-> The Todo List app saves tasks in `localStorage`. If you ever want a clean slate or want to reset default tasks, open the Chrome DevTools Console (`Ctrl+Shift+J` or `Cmd+Option+J`) while on the app page and run:
+> **💡 Pro tip: Refresh cache**  
+> The Todo List app saves tasks in `localStorage`. If you ever want a clean slate or want to reset default tasks, you can do so by clearing local storage in `Application > Local Storage` in **Chrome DevTools**. Or, you can open the Chrome DevTools Console (`Ctrl+Shift+J` or `Cmd+Option+J`) while on the app page and run:
 > ```javascript
 > localStorage.clear(); location.reload();
 > ```
@@ -63,12 +59,14 @@ Once running, keep this terminal window open and open two tabs in Chrome:
 
 ## 📅 Workshop Agenda
 
-| Step | Time | Format | Topic | Workspace Directory | Key Concepts |
-| :---: | :---: | :---: | :--- | :--- | :--- |
-| **Task 1** | 25m | 🧑‍💻 Hands-on | [Imperative WebMCP & DevTools](#task-1-imperative-webmcp--devtools-verification-todo-app) | [`base/todo-list/`](./base/todo-list/) | `registerTool()` JavaScript API, tool activity logging, user safety confirmations |
-| **Task 2** | 20m | 🧑‍💻 Hands-on | [Declarative WebMCP & DevTools](#task-2-declarative-webmcp--devtools-verification-french-bistro) | [`base/french-bistro/`](./base/french-bistro/) | Declarative HTML form tools, `toolautosubmit` attribute, schema mapping |
-| **Task 3** | 15m | 👨‍🏫 + 🧑‍💻 | [Interactive DevTools Debugging](#task-3-debug-imperative-tool-execution) | [`base/todo-list/`](./base/todo-list/) | Source breakpoints, execution flow, diagnostic inspection |
-| **Task 4** | 15m | 🚀 Audit | [Lighthouse Agentic Readiness Audit](#task-4-lighthouse-agentic-readiness-audit) | Both Applications | Automated verification of AI agent compatibility using Lighthouse |
+
+| Step | Format | Topic | Workspace Directory | Key Concepts |
+| :---: | :---: | :--- | :--- | :--- |
+| **Task 1** | 🧑‍💻 Hands-on | [Imperative WebMCP & DevTools](#task-1-imperative-webmcp--devtools-verification-todo-app) | [`base/todo-list/`](./base/todo-list/) | `registerTool()` JavaScript API, tool activity logging, user safety confirmations |
+| **Task 2** | 🧑‍💻 Hands-on | [Declarative WebMCP & DevTools](#task-2-declarative-webmcp--devtools-verification-french-bistro) | [`base/french-bistro/`](./base/french-bistro/) | Declarative HTML form tools, `toolautosubmit` attribute, schema mapping |
+| **Task 3** | 👨‍🏫 + 🧑‍💻 | [Interactive DevTools Debugging](#task-3-debug-imperative-tool-execution) | [`base/todo-list/`](./base/todo-list/) | Source breakpoints, execution flow, diagnostic inspection |
+| **Task 4** | 🚀 Audit | [Lighthouse Agentic Readiness Audit](#task-4-lighthouse-agentic-readiness-audit) | Both Applications | Automated verification of AI agent compatibility using Lighthouse |
+
 
 ---
 
@@ -218,6 +216,14 @@ When the report completes, review the **Agentic Web** diagnostics:
 * **✅ Non-Destructive Auto-Submit Check:** Flags any declarative forms that use `toolautosubmit` on sensitive inputs (such as passwords, payment cards, or deletion triggers).
 
 ---
+
+## Optional: IDE / CLI Tools Setup
+
+Continue exploring WebMCP in your projects using Antigravity and Modern Web Guidance:
+
+* **Antigravity IDE or CLI:** Install [Antigravity IDE](https://antigravity.google/product/antigravity-ide) or [Antigravity CLI](https://antigravity.google/product/antigravity-cli).
+* **Modern Web Guidance Skill:** Verify that the [Modern Web Guidance](https://github.com/GoogleChrome/modern-web-guidance#-quickstart) skill is installed and accessible.
+* **Gemini API Key:** Ensure your `GEMINI_API_KEY` from [Google AI Studio](https://aistudio.google.com/api-keys) is exported in your terminal environment (`echo $GEMINI_API_KEY`).
 
 ## 🎓 Conclusion & Additional Resources
 
