@@ -17,10 +17,10 @@ In this hands-on workshop, you will make two web applications **agent-ready**. B
 
 ## 🛠️ Prerequisites & Pre-Flight Verification
 
-Before starting Task 1, verify that your local environment meets the following requirements:
+Verify that your local environment meets the following requirements:
 
 ### 1. Browser Configuration
-* **Chrome:** Version `150` or higher is required ([Check version in `chrome://settings/help`](chrome://settings/help)).
+* **Chrome:** Version `150` ([Check version in `chrome://settings/help`](chrome://settings/help)).
 * **Enable WebMCP Flags:** Copy and paste the following URL into Chrome, enable the flag, and **relaunch your browser**:
   ```text
   chrome://flags/#enable-webmcp-testing
@@ -30,7 +30,7 @@ Before starting Task 1, verify that your local environment meets the following r
 
 
 > [!IMPORTANT]
-> * **Workshop Workspace:** All hands-on coding during this workshop must take place inside the **[`base/`](./base)** directory.
+> * **Working folder:** All hands-on coding during this workshop must take place inside the **[`base/`](./base)** directory.
 > * **Reference Solutions:** If you get stuck or need to check working implementations, complete solutions are available in the **[`final/`](./final)** directory. Every task is modular—you can switch to a `final/` folder at any point without losing momentum!
 
 ---
@@ -49,8 +49,8 @@ Once running, keep this terminal window open and open two tabs in Chrome:
 * **Le Petit Bistro App:** [http://localhost:8080/french-bistro/](http://localhost:8080/french-bistro/)
 
 > [!TIP]
-> **💡 Pro tip: Refresh cache**  
-> The Todo List app saves tasks in `localStorage`. If you ever want a clean slate or want to reset default tasks, you can do so by clearing local storage in `Application > Local Storage` in **Chrome DevTools**. Or, you can open the Chrome DevTools Console (`Ctrl+Shift+J` or `Cmd+Option+J`) while on the app page and run:
+> **💡 Pro tip: Refreshing cache**  
+> The Todo List app saves tasks in `localStorage`. To start from scratch or refresh the initial tasks, open **Chrome DevTools**, navigate to the `Application` tab, and clear local storage. Alternatively, you can open the Chrome DevTools Console (`Ctrl+Shift+J` or `Cmd+Option+J`) while on the app page and run:
 > ```javascript
 > localStorage.clear(); location.reload();
 > ```
@@ -60,12 +60,12 @@ Once running, keep this terminal window open and open two tabs in Chrome:
 ## 📅 Workshop Agenda
 
 
-| Step | Format | Topic | Workspace Directory | Key Concepts |
-| :---: | :---: | :--- | :--- | :--- |
-| **Task 1** | 🧑‍💻 Hands-on | [Imperative WebMCP & DevTools](#task-1-imperative-webmcp--devtools-verification-todo-app) | [`base/todo-list/`](./base/todo-list/) | `registerTool()` JavaScript API, tool activity logging, user safety confirmations |
-| **Task 2** | 🧑‍💻 Hands-on | [Declarative WebMCP & DevTools](#task-2-declarative-webmcp--devtools-verification-french-bistro) | [`base/french-bistro/`](./base/french-bistro/) | Declarative HTML form tools, `toolautosubmit` attribute, schema mapping |
-| **Task 3** | 👨‍🏫 + 🧑‍💻 | [Interactive DevTools Debugging](#task-3-debug-imperative-tool-execution) | [`base/todo-list/`](./base/todo-list/) | Source breakpoints, execution flow, diagnostic inspection |
-| **Task 4** | 🚀 Audit | [Lighthouse Agentic Readiness Audit](#task-4-lighthouse-agentic-readiness-audit) | Both Applications | Automated verification of AI agent compatibility using Lighthouse |
+| Step | Topic | Workspace Directory | Key Concepts |
+| :---: | :--- | :--- | :--- |
+| **Task 1** | [Imperative WebMCP & DevTools](#task-1-imperative-webmcp--devtools-verification-todo-app) | [`base/todo-list/`](./base/todo-list/) | `registerTool()` JavaScript API, tool activity logging, user safety confirmations |
+| **Task 2** | [Declarative WebMCP & DevTools](#task-2-declarative-webmcp--devtools-verification-french-bistro) | [`base/french-bistro/`](./base/french-bistro/) | Declarative HTML form tools, `toolautosubmit` attribute, schema mapping |
+| **Task 3** | [Interactive DevTools Debugging](#task-3-debug-imperative-tool-execution) | [`base/todo-list/`](./base/todo-list/) | Source breakpoints, execution flow, diagnostic inspection |
+| **Task 4** | [Lighthouse Agentic Readiness Audit](#task-4-lighthouse-agentic-readiness-audit) | Both Applications | Automated verification of AI agent compatibility using Lighthouse |
 
 
 ---
