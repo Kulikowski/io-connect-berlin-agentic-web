@@ -7,8 +7,8 @@ In this hands-on workshop, you will make two web applications **agent-ready**. B
 - [🛠️ Prerequisites & Pre-Flight Verification](#️-prerequisites--pre-flight-verification)
 - [🚀 Quickstart: Launch the Workshop Server](#-quickstart-launch-the-workshop-server)
 - [📅 Workshop Agenda](#-workshop-agenda)
-- [Task 1: Imperative WebMCP & DevTools Verification (Todo App)](#task-1-imperative-webmcp--devtools-verification-todo-app)
-- [Task 2: Declarative WebMCP & DevTools Verification (French Bistro)](#task-2-declarative-webmcp--devtools-verification-french-bistro)
+- [Task 1: Declarative WebMCP & DevTools Verification (French Bistro)](#task-1-declarative-webmcp--devtools-verification-french-bistro)
+- [Task 2: Imperative WebMCP & DevTools Verification (Todo App)](#task-2-imperative-webmcp--devtools-verification-todo-app)
 - [Task 3: Debug Imperative Tool Execution](#task-3-debug-imperative-tool-execution)
 - [Task 4: Lighthouse Agentic Readiness Audit](#task-4-lighthouse-agentic-readiness-audit)
 - [🎓 Conclusion & Additional Resources](#-conclusion--additional-resources)
@@ -62,65 +62,14 @@ Once running, keep this terminal window open and open two tabs in Chrome:
 
 | Step | Topic | Workspace Directory | Key Concepts |
 | :---: | :--- | :--- | :--- |
-| **Task 1** | [Imperative WebMCP & DevTools](#task-1-imperative-webmcp--devtools-verification-todo-app) | [`base/todo-list/`](./base/todo-list/) | `registerTool()` JavaScript API, tool activity logging, user safety confirmations |
-| **Task 2** | [Declarative WebMCP & DevTools](#task-2-declarative-webmcp--devtools-verification-french-bistro) | [`base/french-bistro/`](./base/french-bistro/) | Declarative HTML form tools, `toolautosubmit` attribute, schema mapping |
+| **Task 1** | [Declarative WebMCP & DevTools](#task-1-declarative-webmcp--devtools-verification-french-bistro) | [`base/french-bistro/`](./base/french-bistro/) | Declarative HTML form tools, `toolautosubmit` attribute, schema mapping |
+| **Task 2** | [Imperative WebMCP & DevTools](#task-2-imperative-webmcp--devtools-verification-todo-app) | [`base/todo-list/`](./base/todo-list/) | `registerTool()` JavaScript API, tool activity logging, user safety confirmations |
 | **Task 3** | [Interactive DevTools Debugging](#task-3-debug-imperative-tool-execution) | [`base/todo-list/`](./base/todo-list/) | Source breakpoints, execution flow, diagnostic inspection |
 | **Task 4** | [Lighthouse Agentic Readiness Audit](#task-4-lighthouse-agentic-readiness-audit) | Both Applications | Automated verification of AI agent compatibility using Lighthouse |
 
 
 ---
-
-## Task 1: Imperative WebMCP & DevTools Verification (Todo App)
-
-Imperative WebMCP allows your application to register tools dynamically using JavaScript (`document.modelContext.registerTool()`) based on route changes, user authentication, or page state.
-
-### 💡 Why Imperative WebMCP?
-Every imperative tool requires four core properties:
-1. `name`: Unique identifier for the AI agent (`snake_case`).
-2. `description`: Clear instructions telling the agent *when* and *how* to use the tool.
-3. `inputSchema`: A JSON Schema defining required parameters and their data types.
-4. `execute`: The callback function invoked when the agent executes the tool.
-
----
-
-### 1.1. Implement Imperative Tools (`app.js`)
-
-1. Open **[http://localhost:8080/todo-list/](http://localhost:8080/todo-list/)** in Chrome.
-2. In your IDE, open **`base/todo-list/app.js`** and scroll to **line 386** (`function registerWebMCPTools()`).
-3. Notice that we have provided commented-out stubs for 5 core tools (`Tool 0` through `Tool 4`).
-4. **Your Task:** Uncomment `Tool 0 (get_todos)` and `Tool 1 (add_todo)`. Fill in their `name`, `description`, `inputSchema`, and `execute` handlers so they call `getTodos()` and `addTodo(text)`.
-5. **AI-Assisted Guidance:** If using Antigravity with the **Modern Web Guidance** skill, prompt your assistant:
-   > *"Using the Modern Web Guidance skill, examine `base/todo-list/app.js` and register imperative WebMCP tools for `get_todos` and `add_todo` inside `registerWebMCPTools()`."*
-6. Save **`app.js`** and hard-refresh your browser (`Ctrl+Shift+R` / `Cmd+Shift+R`).
-
-> [!WARNING]
-> **Safety Guardrails for Destructive Actions:**  
-> Never allow an AI agent to execute destructive actions (such as deleting tasks or processing payments) without requiring explicit manual user confirmation! When you inspect `Tool 3 (delete_todo)`, notice how it triggers `showDeleteConfirmDialog(todo.text)` before mutating data, keeping a human in the loop.
-
----
-
-### ✅ Checkpoint 1.2: Verify & Test in Chrome DevTools
-
-Let's verify that the browser has registered your JavaScript tools and test an agent invocation!
-
-1. Open **Chrome DevTools (`F12`)**, navigate to the **Application** tab, and expand **WebMCP > Active Tools** in the left sidebar.
-2. **Verify Registry:** Confirm that `get_todos` and `add_todo` are listed.
-3. **Manual Invocation Test:**
-   * Select `add_todo` in the DevTools panel (or open your **Model Context Tool Inspector** extension).
-   * In the **Test Parameters** box, enter:
-     ```json
-     { "text": "Buy coffee beans for the workshop" }
-     ```
-   * Click **Execute Tool**.
-4. **Observe the Result:** Check the **Tool Activity Log** in DevTools to confirm `Status: Success`. Look at your webpage—the new task *"Buy coffee beans for the workshop"* will appear instantly in your UI!
-
-> [!TIP]
-> **🚀 Fast Finisher Bonus Challenge:**  
-> Finished early? Uncomment and complete `Tool 2 (edit_todo)`, `Tool 3 (delete_todo)`, and `Tool 4 (toggle_todo)`. Test them in DevTools to see how the confirmation modal protects against accidental deletions!
-
----
-
-## Task 2: Declarative WebMCP & DevTools Verification (French Bistro)
+## Task 1: Declarative WebMCP & DevTools Verification (French Bistro)
 
 Declarative WebMCP exposes standard HTML forms as tools to AI agents using pure HTML attributes (`toolname`, `tooldescription`, `toolparamdescription`). Zero JavaScript registration is required!
 
@@ -132,7 +81,7 @@ Declarative WebMCP exposes standard HTML forms as tools to AI agents using pure 
 
 ---
 
-### 2.1. Annotate the Bistro Booking Form (`index.html`)
+### 1.1. Annotate the Bistro Booking Form (`index.html`)
 
 1. Open **[http://localhost:8080/french-bistro/](http://localhost:8080/french-bistro/)** in Chrome.
 2. In your IDE, open **`base/french-bistro/index.html`** and locate `<form id="reservationForm">` (**line 35**).
@@ -154,7 +103,7 @@ Declarative WebMCP exposes standard HTML forms as tools to AI agents using pure 
 
 ---
 
-### ✅ Checkpoint 2.2: Verify Schema Mapping & Gamified Agent Testing
+### ✅ Checkpoint 1.2: Verify Schema Mapping & Agent Testing
 
 Let's verify how the browser translates your HTML attributes into an active tool schema!
 
@@ -178,6 +127,58 @@ Open the **Model Context Tool Inspector** extension on the French Bistro page an
    👉 *See what happens! Because your declarative `<select id="guests">` schema restricts values to `1-6`, the browser informs the agent of this constraint, preventing invalid inputs from reaching your server.*
 
 ---
+
+## Task 2: Imperative WebMCP & DevTools Verification (Todo App)
+
+Imperative WebMCP allows your application to register tools dynamically using JavaScript (`document.modelContext.registerTool()`) based on route changes, user authentication, or page state.
+
+### 💡 Why Imperative WebMCP?
+Every imperative tool requires four core properties:
+1. `name`: Unique identifier for the AI agent (`snake_case`).
+2. `description`: Clear instructions telling the agent *when* and *how* to use the tool.
+3. `inputSchema`: A JSON Schema defining required parameters and their data types.
+4. `execute`: The callback function invoked when the agent executes the tool.
+
+---
+
+### 2.1. Implement Imperative Tools (`app.js`)
+
+1. Open **[http://localhost:8080/todo-list/](http://localhost:8080/todo-list/)** in Chrome.
+2. In your IDE, open **`base/todo-list/app.js`** and scroll to **line 386** (`function registerWebMCPTools()`).
+3. Notice that we have provided commented-out stubs for 5 core tools (`Tool 0` through `Tool 4`).
+4. **Your Task:** Uncomment `Tool 0 (get_todos)` and `Tool 1 (add_todo)`. Fill in their `name`, `description`, `inputSchema`, and `execute` handlers so they call `getTodos()` and `addTodo(text)`.
+5. **AI-Assisted Guidance:** If using Antigravity with the **Modern Web Guidance** skill, prompt your assistant:
+   > *"Using the Modern Web Guidance skill, examine `base/todo-list/app.js` and register imperative WebMCP tools for `get_todos` and `add_todo` inside `registerWebMCPTools()`."*
+6. Save **`app.js`** and hard-refresh your browser (`Ctrl+Shift+R` / `Cmd+Shift+R`).
+
+> [!WARNING]
+> **Safety Guardrails for Destructive Actions:**  
+> Never allow an AI agent to execute destructive actions (such as deleting tasks or processing payments) without requiring explicit manual user confirmation! When you inspect `Tool 3 (delete_todo)`, notice how it triggers `showDeleteConfirmDialog(todo.text)` before mutating data, keeping a human in the loop.
+
+---
+
+### ✅ Checkpoint 2.2: Verify & Test in Chrome DevTools
+
+Let's verify that the browser has registered your JavaScript tools and test an agent invocation!
+
+1. Open **Chrome DevTools (`F12`)**, navigate to the **Application** tab, and expand **WebMCP > Active Tools** in the left sidebar.
+2. **Verify Registry:** Confirm that `get_todos` and `add_todo` are listed.
+3. **Manual Invocation Test:**
+   * Select `add_todo` in the DevTools panel (or open your **Model Context Tool Inspector** extension).
+   * In the **Test Parameters** box, enter:
+     ```json
+     { "text": "Buy coffee beans for the workshop" }
+     ```
+   * Click **Execute Tool**.
+4. **Observe the Result:** Check the **Tool Activity Log** in DevTools to confirm `Status: Success`. Look at your webpage—the new task *"Buy coffee beans for the workshop"* will appear instantly in your UI!
+
+> [!TIP]
+> **🚀 Fast Finisher Bonus Challenge:**  
+> Finished early? Uncomment and complete `Tool 2 (edit_todo)`, `Tool 3 (delete_todo)`, and `Tool 4 (toggle_todo)`. Test them in DevTools to see how the confirmation modal protects against accidental deletions!
+
+---
+
+
 
 ## Task 3: Debug Imperative Tool Execution
 
