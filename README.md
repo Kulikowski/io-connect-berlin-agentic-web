@@ -1,149 +1,236 @@
 # 🚀 Practical steps to make your website agent-ready
 **IO Connect Hands-on Workshop**
 
-In this workshop, we are going to make two simple websites **agent-ready**. By the end, you will expose tools using both imperative and declarative WebMCP APIs, enabling AI agents to interact with them programmatically and reliably.
+In this hands-on workshop, you will make two web applications **agent-ready**. By the end of this session, you will expose tools using both **imperative** and **declarative** WebMCP APIs, enabling AI agents to interact with your websites programmatically and reliably.
 
-> [!IMPORTANT]
-> * **Workshop Directory:** All hands-on coding during the workshop should take place inside the [base](./base) directory.
-> * **Completed Examples:** If you need a reference or get stuck, the finished code and ready-made examples are available in the [final](./final) directory.
+## 📑 Table of Contents
+- [🛠️ Prerequisites & Pre-Flight Verification](#️-prerequisites--pre-flight-verification)
+- [🚀 Quickstart: Launch the Workshop Server](#-quickstart-launch-the-workshop-server)
+- [📅 Workshop Agenda](#-workshop-agenda)
+- [Task 1: Declarative WebMCP & DevTools Verification (French Bistro)](#task-1-declarative-webmcp--devtools-verification-french-bistro)
+- [Task 2: Imperative WebMCP & DevTools Verification (Todo App)](#task-2-imperative-webmcp--devtools-verification-todo-app)
+- [Task 3: Debug Imperative Tool Execution](#task-3-debug-imperative-tool-execution)
+- [Task 4: Lighthouse Agentic Readiness Audit](#task-4-lighthouse-agentic-readiness-audit)
+- [🎓 Conclusion & Additional Resources](#-conclusion--additional-resources)
 
-## 🛠️ Prerequisites & Setup
+---
 
-Before starting the workshop, ensure you have the following technical requirements set up:
+## 🛠️ Prerequisites & Pre-Flight Verification
+
+Verify that your local environment meets the following requirements:
 
 ### 1. Browser Configuration
-* **Chrome:** Version `150` or higher is required.
-* **Feature Flags:** Navigate to the following addresses and enable the flags (then restart the browser):
-  * `chrome://flags/#enable-webmcp-testing` (Enables the core WebMCP APIs)
-* **Model Context Tool Inspector:** Ensure the WebMCP [debugging extension](https://chromewebstore.google.com/detail/webmcp-model-context-tool/gbpdfapgefenggkahomfgkhfehlcenpd?pli=1) is installed for verifying and triggering tools.
+* **Chrome:** Version `150` ([Check version in `chrome://settings/help`](chrome://settings/help)).
+* **Enable WebMCP Flags:** Copy and paste the following URL into Chrome, enable the flag, and **relaunch your browser**:
+  ```text
+  chrome://flags/#enable-webmcp-testing
+  ```
+* **Install Inspector Extension:** Install the [Model Context Tool Inspector](https://chromewebstore.google.com/detail/webmcp-model-context-tool/gbpdfapgefenggkahomfgkhfehlcenpd?pli=1) extension to inspect and trigger tools during exercises. This will enable you to test your WebMCP implementation locally.
+* **Gemini API Key:** To use the Gemini integration of the extension, you will need a Gemini API key. You can get one from [Google AI Studio](https://aistudio.google.com/api-keys).  
 
-### 2. Environment & CLI Tools
-* **Antigravity IDE & Antigravity CLI:** Install the [Antigravity IDE](https://antigravity.google/product/antigravity-ide) or [Antigravity CLI](https://antigravity.google/product/antigravity-cli).
-* **Gemini API Key:** Ensure your `GEMINI_API_KEY` is retrieved from [Google AI Studio](https://aistudio.google.com/api-keys) and configured in your local environment.
-* **Modern Web Guidance:** Verify that the [Modern Web Guidance](https://github.com/GoogleChrome/modern-web-guidance#-quickstart) is installed.
+
+> [!IMPORTANT]
+> * **Working folder:** All hands-on coding during this workshop must take place inside the **[`base/`](./base)** directory.
+> * **Reference Solutions:** If you get stuck or need to check working implementations, complete solutions are available in the **[`final/`](./final)** directory. Every task is modular—you can switch to a `final/` folder at any point without losing momentum!
+
+---
+
+## 🚀 Quickstart: Launch the Workshop Server
+
+To serve the local workshop applications without caching issues, open your terminal at the **root of this repository** and run:
+
+```bash
+npx http-server base --port=8080 -c-1
+```
+*(The `-c-1` flag disables browser caching, ensuring your code edits reload instantly).*
+
+Once running, keep this terminal window open and open two tabs in Chrome:
+* **Todo List App:** [http://localhost:8080/todo-list/](http://localhost:8080/todo-list/)
+* **Le Petit Bistro App:** [http://localhost:8080/french-bistro/](http://localhost:8080/french-bistro/)
 
 > [!TIP]
-> **Running the Demo Website:**
-> You can run the demo website on a specific port using:
-> ```bash
-> npx http-server --port=8080 -c-1
+> **💡 Pro tip: Refreshing cache**  
+> The Todo List app saves tasks in `localStorage`. To start from scratch or refresh the initial tasks, open **Chrome DevTools**, navigate to the `Application` tab, and clear local storage. Alternatively, you can open the Chrome DevTools Console (`Ctrl+Shift+J` or `Cmd+Option+J`) while on the app page and run:
+> ```javascript
+> localStorage.clear(); location.reload();
 > ```
-> *Note:* When making changes to the website, and running it without `-c-1` you may need to clear your browser's cache to ensure the most up-to-date state is loaded. Local storage is used to keep track of todos, so if you want clean state you need to clear local storage in **Application > Local Storage** in Chrome DevTools.
 
 ---
 
-## 📅 Agenda & Lab Steps
+## 📅 Workshop Agenda
 
-| Step | Topic | Application | Key Concept |
-| :--- | :--- | :--- | :--- |
-| **1.1** | [Implement Imperative WebMCP](#11-implement-imperative-webmcp) | Todo List | Register tools using JavaScript (`registerTool`), user confirmations |
-| **1.2** | [Validate with DevTools (Imperative)](#12-validate-with-devtools-imperative) | Todo List | Checking registered tools, tools activity |
-| **2.1** | [Implement Declarative WebMCP](#21-implement-declarative-webmcp) | French Bistro | Declarative forms, auto-submit |
-| **2.2** | [Validate with DevTools (Declarative)](#22-validate-with-devtools-declarative) | French Bistro | Checking form fields mapping, real-time input filling |
-| **3.1** | [Debug Imperative Tool](#31-debug-imperative-tool) | Todo List | Breakpoints, Testing |
-| **4.1** | [Lighthouse Agentic Web Audit](#41-lighthouse-agentic-web-audit) | Both Apps | Audit prepared web-pages for agentic readiness |
+
+| Step | Topic | Workspace Directory | Key Concepts |
+| :---: | :--- | :--- | :--- |
+| **Task 1** | [Declarative WebMCP & DevTools](#task-1-declarative-webmcp--devtools-verification-french-bistro) | [`base/french-bistro/`](./base/french-bistro/) | Declarative HTML form tools, `toolautosubmit` attribute, schema mapping |
+| **Task 2** | [Imperative WebMCP & DevTools](#task-2-imperative-webmcp--devtools-verification-todo-app) | [`base/todo-list/`](./base/todo-list/) | `registerTool()` JavaScript API, tool activity logging, user safety confirmations |
+| **Task 3** | [Interactive DevTools Debugging](#task-3-debug-imperative-tool-execution) | [`base/todo-list/`](./base/todo-list/) | Source breakpoints, execution flow, diagnostic inspection |
+| **Task 4** | [Lighthouse Agentic Readiness Audit](#task-4-lighthouse-agentic-readiness-audit) | Both Applications | Automated verification of AI agent compatibility using Lighthouse |
+
+
+---
+## Task 1: Declarative WebMCP & DevTools Verification (French Bistro)
+
+Declarative WebMCP exposes standard HTML forms as tools to AI agents using pure HTML attributes (`toolname`, `tooldescription`, `toolparamdescription`). Zero JavaScript registration is required!
+
+### 💡 Conceptual Primer: Declarative Attributes
+* **`toolname`** *(on `<form>`)*: The name exposed to the AI agent (e.g., `book_table_le_petit_bistro`).
+* **`tooldescription`** *(on `<form>`)*: Explains what submitting this form accomplishes.
+* **`toolautosubmit`** *(on `<form>` - Optional)*: If present, the browser automatically submits the form upon tool invocation. If omitted, the agent populates the fields but **waits for the human user to click Submit**.
+* **`toolparamdescription`** *(on `<input>`, `<select>`, `<textarea>`)*: Describes parameter constraints and formatting requirements (e.g., `YYYY-MM-DD`).
 
 ---
 
-### Task 1: Imperative WebMCP & DevTools Verification
+### 1.1. Annotate the Bistro Booking Form (`index.html`)
 
-#### 1.1. Implement Imperative WebMCP
-**Topic:** Imperative API & Tool Lifecycle (Todo List App)
-
-In this exercise, you will register a tool programmatically using JavaScript. This allows the application to dynamically share tools based on route, user actions, or page state.
-
-##### 🎯 Goal
-Use the **Modern Web Guidance** skill via the Antigravity CLI or IDE to register a WebMCP tools that handle interactions with the todo list items.
-
-> [WARNING]
-> **Safety Guardrails:** Never let an AI agent perform destructive or irreversible actions without manual user review/confirmation outside the agent's control.
-
----
-
-#### 1.2. Validate with DevTools (Imperative)
-**Topic:** Active Tool Registry & Activity Log
-
-Verify that your newly created imperative WebMCP tool is correctly registered in the browser's active registry.
-
-##### 🎯 Action Steps
-1. Open Chrome DevTools and navigate to the **Application** panel.
-2. In the left-hand sidebar, locate the **WebMCP** section.
-3. Verify that your tools are correctly detected and listed under the registered active tools.
-4. Use the DevTools panel to trigger a manual invocation or use the debugging extension:
-   - Check the **Tool Activity Log** to see the parameters, status, and the JSON output returned by your tool.
-5. Trace back from DevTools to see where the tool registry code is defined in your sources.
-
----
-
-### Task 2: Declarative WebMCP & DevTools Verification
-
-#### 2.1. Implement Declarative WebMCP
-**Topic:** Declarative Forms API (French Bistro Booking)
-
-Declarative WebMCP allows you to expose standard HTML forms as tools to AI agents using HTML attributes alone.
-
-##### 🎯 Goal
-Use the **Modern Web Guidance** skill via the Antigravity CLI or IDE to enable an AI agent to book a reservation at the Le Petit Bistro restaurant by annotating the booking form.
+1. Open **[http://localhost:8080/french-bistro/](http://localhost:8080/french-bistro/)** in Chrome.
+2. In your IDE, open **`base/french-bistro/index.html`** and locate `<form id="reservationForm">` (**line 35**).
+3. Add `toolname` and `tooldescription` directly to the `<form>` tag:
+   ```html
+   <form
+     id="reservationForm"
+     toolname="book_table_le_petit_bistro"
+     tooldescription="Initiates a dining reservation request at Le Petit Bistro. Accepts customer details, timing, and seating preferences."
+     novalidate
+   >
+   ```
+4. Annotate each input field (`#name`, `#phone`, `#date`, `#time`, `#guests`, `#seating`) with `toolparamdescription` attributes explaining what they expect.
+5. Save **`index.html`** and reload the page in Chrome.
 
 > [!NOTE]
-> **To Auto-Submit or Not?**
-> Assess if this booking form should include the `toolautosubmit` attribute. If it's a critical or transactional booking, omitting it allows the user to review the filled fields before manually confirming.
-
-##### 🎮 Play with Queries
-Once annotated, try querying the agent:
-* *"I'd like to book a table for 3 people tomorrow at 7 PM under the name Alex."*
-* Observe how the agent automatically maps and populates these values!
+> **To Auto-Submit or Not? (Engineering Trade-off)**  
+> Notice that we did **not** add `toolautosubmit` to `reservationForm`. Because booking a restaurant table is a transactional commitment, omitting `toolautosubmit` lets the user visually review the AI-populated fields before clicking **Request Reservation** themselves!
 
 ---
 
-#### 2.2. Validate with DevTools (Declarative)
-**Topic:** Declarative Tool Active Registry & Field Mapping
+### ✅ Checkpoint 1.2: Verify Schema Mapping & Agent Testing
 
-Verify that your newly annotated declarative form is recognized by the browser.
+Let's verify how the browser translates your HTML attributes into an active tool schema!
 
-##### 🎯 Action Steps
-1. Navigate to the **Application** panel in DevTools and select the **WebMCP** section.
-2. Confirm that `book_restaurant_table` is registered in the list of active tools.
-3. Inspect the schema generated by the browser. Observe how form field attributes (such as `required`, type specifications, options in `<select>`) have been translated into JSON Schema parameters.
-4. Use the manual test invocation in DevTools:
-   - Input test variables for name, date, time, and guests.
-   - Execute the tool call and verify that the values are dynamically filled in the form fields.
-   - Inspect the return status in the **Tool Activity Log** after submission to verify the success response.
+1. In Chrome DevTools (`F12`), navigate to **Application > WebMCP > Active Tools**.
+2. Click **`book_table_le_petit_bistro`** and select the **Schema** tab.
+3. Observe how your HTML `required` attributes became `"required": ["name", ...]` and how `<select id="guests">` options (`1` through `6`) automatically became a JSON Schema `"enum"` array!
 
----
+#### 🎮 Test Your Agent ("Break the Agent!")
+Open the **Model Context Tool Inspector** extension on the French Bistro page and test these natural language queries:
 
-### Task 3: Debug Imperative Tool
+1. **🌟 The Happy Path:**  
+   *"I'd like to book a table for 3 people tomorrow at 7 PM under the name Alex."*  
+   👉 *Watch the form fields magically populate right before your eyes!*
 
-#### 3.1. Debug Imperative Tool
-**Topic:** Interactive DevTools Debugging
+2. **🧠 The Reasoning Challenge:**  
+   *"Can you get me a table for 2 this coming Friday around dinner time? My name is Marie."*  
+   👉 *Notice how the agent infers a future date and picks a standard dinner slot (19:00)!*
 
-Learn the debugging pattern for diagnosing execution flow within your imperative tool.
-
-##### 🎯 Action Steps
-1. Navigate to the **Sources** panel in DevTools.
-2. Open `app.js` and set a breakpoint on the first line inside your tool's `execute` callback.
-3. Open the **WebMCP** panel in DevTools and trigger a tool invocation with custom parameters.
-4. Watch the execution freeze on your breakpoint. Step through the execution lines to examine variables.
-5. Inspect the status (e.g. `Success` or `Error`) and parameters within the **Tool Activity Log** to see the final output.
+3. **🛡️ The Constraint Test (Break the Agent!):**  
+   *"Book a table for 20 people tonight."*  
+   👉 *See what happens! Because your declarative `<select id="guests">` schema restricts values to `1-6`, the browser informs the agent of this constraint, preventing invalid inputs from reaching your server.*
 
 ---
 
-### Task 4: Lighthouse Agentic Web Audit
+## Task 2: Imperative WebMCP & DevTools Verification (Todo App)
 
-#### 4.1. Lighthouse Agentic Web Audit
-**Topic:** Agentic Browsing Verification
+Imperative WebMCP allows your application to register tools dynamically using JavaScript (`document.modelContext.registerTool()`) based on route changes, user authentication, or page state.
 
-The experimental **Agentic Browsing** audit in Lighthouse verifies that a website works well with AI agents.
-
-##### 🚀 Action Steps
-Run the Lighthouse Agentic Web Audit in Chrome DevTools (Lighthouse panel).
+### 💡 Why Imperative WebMCP?
+Every imperative tool requires four core properties:
+1. `name`: Unique identifier for the AI agent (`snake_case`).
+2. `description`: Clear instructions telling the agent *when* and *how* to use the tool.
+3. `inputSchema`: A JSON Schema defining required parameters and their data types.
+4. `execute`: The callback function invoked when the agent executes the tool.
 
 ---
 
-## 🎓 Conclusion & Resources
+### 2.1. Implement Imperative Tools (`app.js`)
 
-* **Evals (Evaluations):** Used for testing non-deterministic agent interactions. Since agents can select various paths to accomplish a task, standard unit tests aren't sufficient. Evals ensure consistent and safe outcomes.
-* **Additional Resources:**
-  * **[WebMCP Documentation](https://developer.chrome.com/docs/ai/webmcp)** — Chrome developer guide, specifications, and browser flags.
-  * **[Lighthouse GitHub Repository](https://github.com/GoogleChrome/lighthouse)** — Main project repository for Lighthouse.
-  * **[GoogleChromeLabs/webmcp-tools](https://github.com/GoogleChromeLabs/webmcp-tools)** — Demo examples, extensions, and the experimental **Evals CLI**.
+1. Open **[http://localhost:8080/todo-list/](http://localhost:8080/todo-list/)** in Chrome.
+2. In your IDE, open **`base/todo-list/app.js`** and scroll to **line 386** (`function registerWebMCPTools()`).
+3. Notice that we have provided commented-out stubs for 5 core tools (`Tool 0` through `Tool 4`).
+4. **Your Task:** Uncomment `Tool 0 (get_todos)` and `Tool 1 (add_todo)`. Fill in their `name`, `description`, `inputSchema`, and `execute` handlers so they call `getTodos()` and `addTodo(text)`.
+5. **AI-Assisted Guidance:** If using Antigravity with the **Modern Web Guidance** skill, prompt your assistant:
+   > *"Using the Modern Web Guidance skill, examine `base/todo-list/app.js` and register imperative WebMCP tools for `get_todos` and `add_todo` inside `registerWebMCPTools()`."*
+6. Save **`app.js`** and hard-refresh your browser (`Ctrl+Shift+R` / `Cmd+Shift+R`).
+
+> [!WARNING]
+> **Safety Guardrails for Destructive Actions:**  
+> Never allow an AI agent to execute destructive actions (such as deleting tasks or processing payments) without requiring explicit manual user confirmation! When you inspect `Tool 3 (delete_todo)`, notice how it triggers `showDeleteConfirmDialog(todo.text)` before mutating data, keeping a human in the loop.
+
+---
+
+### ✅ Checkpoint 2.2: Verify & Test in Chrome DevTools
+
+Let's verify that the browser has registered your JavaScript tools and test an agent invocation!
+
+1. Open **Chrome DevTools (`F12`)**, navigate to the **Application** tab, and expand **WebMCP > Active Tools** in the left sidebar.
+2. **Verify Registry:** Confirm that `get_todos` and `add_todo` are listed.
+3. **Manual Invocation Test:**
+   * Select `add_todo` in the DevTools panel (or open your **Model Context Tool Inspector** extension).
+   * In the **Test Parameters** box, enter:
+     ```json
+     { "text": "Buy coffee beans for the workshop" }
+     ```
+   * Click **Execute Tool**.
+4. **Observe the Result:** Check the **Tool Activity Log** in DevTools to confirm `Status: Success`. Look at your webpage—the new task *"Buy coffee beans for the workshop"* will appear instantly in your UI!
+
+> [!TIP]
+> **🚀 Fast Finisher Bonus Challenge:**  
+> Finished early? Uncomment and complete `Tool 2 (edit_todo)`, `Tool 3 (delete_todo)`, and `Tool 4 (toggle_todo)`. Test them in DevTools to see how the confirmation modal protects against accidental deletions!
+
+---
+
+
+
+## Task 3: Debug Imperative Tool Execution
+
+Learn the debugging workflow for diagnosing execution flow and parameter handling within imperative WebMCP tools.
+
+### 3.1. Set Breakpoints & Trace Execution (`app.js`)
+
+1. In **Chrome DevTools (`F12`)**, switch to the **Sources** panel.
+2. In the left file tree, navigate to `localhost:8080 > todo-list > app.js`.
+3. Click the line number inside your `add_todo` tool's `execute` callback function to set a **breakpoint**.
+4. Open the **Application > WebMCP** panel in DevTools and manually trigger `add_todo` with test parameters (`{"text": "Debug breakpoint check"}`).
+5. When script execution pauses on your breakpoint in the **Sources** panel, step over lines (`F10`) to inspect local variables and verify payload mapping.
+6. Resume execution (`F8`) and verify the output payload in the **Tool Activity Log**.
+
+---
+
+## Task 4: Lighthouse Agentic Readiness Audit
+
+To ensure your web application is accessible to both human users and autonomous AI agents, Chrome has introduced the experimental **Agentic Web Audit** in Lighthouse.
+
+### 4.1. Run the Agentic Readiness Audit
+
+1. In Chrome, open either your completed **Todo List App** or **French Bistro App**.
+2. Open **Chrome DevTools (`F12`)** and select the **Lighthouse** tab.
+3. Under **Mode**, select **Navigation (Default)**.
+4. Under **Device**, select **Desktop**.
+5. Under **Categories**, uncheck Performance/SEO if desired, but ensure **Accessibility** and **Agentic Web (Experimental)** are checked.
+6. Click **Analyze page load**.
+
+### 📊 4.2. Interpreting Your Audit Results
+
+When the report completes, review the **Agentic Web** diagnostics:
+* **✅ WebMCP Tools Registered:** Confirms that `navigator.modelContext` detected valid tool definitions without runtime errors.
+* **✅ Schema Validation:** Verifies that all `inputSchema` definitions conform to valid JSON Schema draft-07 standards.
+* **✅ Form & Input Accessible Labels:** Confirms that interactive buttons and inputs can be queried accurately by agent DOM parsers.
+* **✅ Non-Destructive Auto-Submit Check:** Flags any declarative forms that use `toolautosubmit` on sensitive inputs (such as passwords, payment cards, or deletion triggers).
+
+---
+
+## Optional: IDE / CLI Tools Setup
+
+Continue exploring WebMCP in your projects using Antigravity and Modern Web Guidance:
+
+* **Antigravity IDE or CLI:** Install [Antigravity IDE](https://antigravity.google/product/antigravity-ide) or [Antigravity CLI](https://antigravity.google/product/antigravity-cli).
+* **Modern Web Guidance Skill:** Verify that the [Modern Web Guidance](https://github.com/GoogleChrome/modern-web-guidance#-quickstart) skill is installed and accessible.
+* **Gemini API Key:** Ensure your `GEMINI_API_KEY` from [Google AI Studio](https://aistudio.google.com/api-keys) is exported in your terminal environment (`echo $GEMINI_API_KEY`).
+
+## 🎓 Conclusion & Additional Resources
+
+* **Why Evals Matter:** Standard unit tests are insufficient for testing AI agent workflows because agents can select non-deterministic paths to complete tasks. **Evaluations (Evals)** test agent behaviors across diverse prompts to ensure consistent, reliable, and safe outcomes across all user queries.
+
+### Recommended Reading & Tools
+* **[WebMCP Documentation](https://developer.chrome.com/docs/ai/webmcp)** — Chrome developer guide, technical specifications, and browser flag references.
+* **[GoogleChromeLabs/webmcp-tools](https://github.com/GoogleChromeLabs/webmcp-tools)** — Demo applications, browser extensions, and the experimental **Evals CLI**.
+* **[Lighthouse GitHub Repository](https://github.com/GoogleChrome/lighthouse)** — Source repository for Lighthouse and experimental audit definitions.
